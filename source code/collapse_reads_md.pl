@@ -1,151 +1,79 @@
-#!/usr/bin/perl
+#!/usr/bin/perl  -w
 
-# miRDeep2 collapse-reads-md perl script
-# Copyright (C) 2008 - 2011  Marc Friedländer
-# Copyright (C) 2009 - 2011  Sebastian Mackowiak
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use warnings;
 use strict;
-use Getopt::Std;
+use warnings;
+use Getopt::Long;
 
-my $usage =
-"$0 file_fasta prefix
-
-Collapses reads in the fasta file to make each sequence entry unique. Each collapsed
-entry will have an identifier that follows an underscore '_' separated format. Example:
-
->mmu_1189273_x10
-
-The first field 'mmu' shows which sample the sequence is from. This prefix is given on
-the command line, and must consist of exactly three alphabetic letters. The second field
-'118273' is a running number that secures that each identifier is unique. The third
-field '_x10' shows how many times the given sequence was present in the dataset.
-
--a    outputs progress
-
-example use:
-collapse_reads.pl reads.fa mmu
-";
-
-my $file_fasta=shift or die $usage;
-my $prefix=shift or die $usage;
+my $version = "1.1";
+my $options = get_options($version);
 
 
-my %options=();
-getopts("a",\%options);
+my $fastqInput = $$options{'i'};
+my $fastaOutput = $$options{'o'};
 
-my %hash;
-
-test_prefix($prefix);
-
-parse_file_fasta_seqkey(\$file_fasta,\%hash);
-
-print_hash_seqkey(\%hash);
-
-
-
-sub parse_file_fasta_seqkey{
-
-    my($file,$hash)=@_;
-    my($id,$seq)=();
-
-    if($options{a}){print STDERR "reading file into hash\n";}
-    my $running_1=0;
-
-    open (FASTA, "<$$file") or die "can not open $$file\n";
-    while (<FASTA>)
-    {
-        chomp;
-        if (/^>(\S+)/)
-	{
-	    $id  = $1;
-	    $seq = "";
-	    while (<FASTA>){
-			chomp;
-			if (/^>(\S+)/){
-
-				my $cnt=find_cnt($id);
-				$seq=~tr/[acgtun\.]/[ACGTTNN]/;
-				$$hash{$seq}+=$cnt;
-				$running_1++;
-				if($options{a}){print STDERR "$running_1\r";}
-
-				$id   = $1;
-				$seq  = "";
-				next;
-			}
-			$seq.= $_;
-	    }
-	}
-    }
-
-    my $cnt=find_cnt($id);
-    $seq=~tr/[acgtun\.]/[ACGTTNN]/;
-    $$hash{$seq}+=$cnt;
-    $running_1++;
-    if($options{a}){print STDERR "$running_1\r";}
-
-    close FASTA;
-}
-
-sub print_hash_seqkey{
-
-    my ($hash)=@_;
-    if($options{a}){print STDERR "sorting hash\n";}
-    my $running_2=0;
-    if($options{a}){print STDERR "printing hash\n";}
-    foreach my $key(sort {$$hash{$b} <=> $$hash{$a}} keys %$hash){
-
-		my $cnt=$$hash{$key};
-
-		print ">$prefix\_$running_2\_x$cnt\n$key\n";
-		$running_2+=$cnt;
-		if($options{a}){print STDERR "$running_2\r";}
-    }
+if ($fastqInput =~ /.gz$/) {
+    open(CHART, "gzip -dc $fastqInput |") || die "cannot open $fastqInput\n";
+} else {
+    open(CHART, "<$fastqInput") || die "cannot open $fastqInput\n";
 }
 
 
 
-
-sub find_cnt{
-
-    #finds the frequency of a given read query from its id.
-
-    my($query)=@_;
-
-    if($query=~/_x(\d+)/){
-
-		my $cnt=$1;
-
-		return $cnt;
-
-    }else{
-
-		return 1;
-    }
+if ($fastaOutput =~ /\.gz$/) {
+    open OUT, "|gzip >$fastaOutput" ||die $!;
+} else {
+    open OUT, ">$fastaOutput" ||die $!;
 }
 
 
-sub test_prefix{
+my %seqs;
+while(<CHART>) {
+   chomp;
+   my $seqname = $_;
+   my $seq=<CHART>;
+   my $strand=<CHART>;
+   my $qual=<CHART>;
+   $seq=~s/\s+//g;
+   $seq=~s/\n+//g;
+   next if length($seq) > 50;
+   if(not exists $seqs{$seq}) {
+     $seqs{$seq} = 1;
+   } else {
+     $seqs{$seq}++;
+   }
+}
+close CHART;
 
-    my $prefix=shift;
+my $n=0;
+for my $key (reverse sort {$seqs{$a}<=>$seqs{$b}} keys %seqs) {
+    $n++;
+    print OUT ">seq$n"."_x$seqs{$key}\n$key\n";
+}
+close OUT;
 
-    unless($prefix=~/^\w\w\w$/ and !($prefix=~/_/)){
 
-		die "prefix $prefix does not contain exactly three alphabet letters\n";
+
+sub usage_message {
+    my $version_num = shift;
+    my $usage_message = "\nConvert fastq to collapsed fasta:
+    Usage: perl $0 -i <fq> -o <fa>
+    <fq> : fastq file without adaptor (.fq .fastq).
+    <fa> : output fasta file (.fa .fasta).\n";
+    return $usage_message;
+}
+
+sub get_options {
+    my($v_num) = shift;
+    my %options = ();
+    GetOptions(\%options,
+	       'help',
+	       'i=s',
+	       'o=s'
+    );
+    unless(%options) {
+	my $usage_message = usage_message($v_num);
+	die "$usage_message\n";
     }
-    return;
+    return \%options;
 }

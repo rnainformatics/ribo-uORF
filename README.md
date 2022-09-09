@@ -4,10 +4,15 @@
 
 http://rnainformatics.org.cn/RiboUORF/ 
 
-### 1: ORFannotate.pl
+### 1: `ORFannotate.pl`
 
-### 2: ribORF.pl
+### 2: `ribORF.pl`
 
-### 3: uorf_lib_filter.R
+### 3: `uorf_lib_filter.R`
 
-### 4: collapse_reads_md.pl
+### 4: `collapse_reads_md.pl`
+
+Convert fastq to collapsed fasta:
+    Usage: `perl fq2collapedFa.pl -i <fq> -o <fa>`
+    `<fq>` : fastq file without adaptor (.fq .fastq).
+    `<fa>` : output fasta file (.fa .fasta).
