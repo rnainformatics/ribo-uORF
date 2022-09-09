@@ -10,4 +10,4 @@ http://rnainformatics.org.cn/RiboUORF/
 
 ### 3: uorf_lib_filter.R
 
-### 4：collapse_reads_md.pl
+### 4: collapse_reads_md.pl
