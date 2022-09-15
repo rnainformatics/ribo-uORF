@@ -16,3 +16,5 @@ Convert fastq to collapsed fasta:
     Usage: `perl fq2collapedFa.pl -i <fq> -o <fa>`
     `<fq>` : fastq file without adaptor (.fq .fastq).
     `<fa>` : output fasta file (.fa .fasta).
+
+### 5: `fq2collapedFa.pl`
