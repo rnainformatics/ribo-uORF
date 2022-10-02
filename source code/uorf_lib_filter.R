@@ -6,14 +6,43 @@ args <- commandArgs(TRUE)
 org <- args[1]
 
 
-
-txdb <- loadDb(paste0("/public/home/liyiliang/ribo/ribotoolkit/db/annotation/",org,".gencode.sqlite"))
+txdb <- loadDb(paste0(org,".gencode.sqlite"))
 cdsRange <- cdsBy(txdb,use.names=T)
 cds5site <- as.data.table(cdsRange)
 
-peakfile = paste0("all.uORF.utr5.bed")
+tr2gene <- fread(paste0(org,".txlens.txt"),head=T,sep="\t")
+tr2gene <- tr2gene[,.(tx_name,gene_id)]
+
+peakfile = paste0(org,"/all.uORF.utr5.bed")
 peak_site = fread(peakfile,head=F,sep="\t")
 setnames(peak_site,  c("chr","ustart","uend","ID","strand","numCDS"))
+
+peak_site2 <- peak_site[,  tstrsplit(ID, "|", fixed=TRUE)]
+peak_site3 <- peak_site2[,  tstrsplit(V3, ":", fixed=TRUE)]
+peak_site5 <- peak_site2[,  tstrsplit(V1, ":", fixed=TRUE)]
+
+peak_site_gene <- cbind(peak_site, peak_site5[,.(tx_name=V1)])
+peak_site_gene <- cbind(peak_site_gene, peak_site3[,.(trStart=V2,trEnd=V3)])
+peak_site_gene <- merge(peak_site_gene,tr2gene,by="tx_name",all.x=T)
+
+peak_site_gene[,uORFid := paste0(gene_id,"_",chr,"_",ustart,"_",uend)]
+setorder(peak_site_gene,uORFid)
+peak_site_gene <- peak_site_gene[,.(chr,ustart,uend,ID,strand,numCDS,tx_name, trStart, trEnd, gene_id,uORFid)]
+fwrite(peak_site_gene,file=paste0(org,"/all.uORF.utr5.gene.bed"),sep="\t")
+peak_site_gene_genomic_bed <- peak_site_gene[,.(chr, ustart, uend, uORFid, numCDS, strand)]
+peak_site_gene_genomic_bed <- unique(peak_site_gene_genomic_bed,by="uORFid")
+fwrite(peak_site_gene_genomic_bed,file=paste0(org,"/all.uORF.utr5.gene.genomic.bed6"),sep="\t",col.names=F)
+peak_site_gene_transcript_bed <- peak_site_gene[,.(tx_name, trStart, trEnd, uORFid, "*", "*")]
+peak_site_gene_transcript_bed <- unique(peak_site_gene_transcript_bed,by="uORFid")
+fwrite(peak_site_gene_transcript_bed,file=paste0(org,"/all.uORF.utr5.gene.transcript.bed6"),sep="\t",col.names=F)
+
+peak_site <- cbind(peak_site, peak_site3[,.(V2,V3)])
+peak_site[,V2:=as.numeric(V2)]
+peak_site[,V3:=as.numeric(V3)]
+peak_site[,orfLen:=V3-V2]
+peak_site_short <- peak_site[orfLen < 18]
+peak_site_short[,type:="too_short"]
+peak_site <- peak_site[orfLen >= 18]
 
 peak_range = GRanges(seqnames=peak_site[,chr], ranges=IRanges(peak_site[,ustart], peak_site[,uend]),strand=peak_site[,strand])
 cn <- colnames(peak_site)
@@ -25,30 +54,12 @@ if (length(cn) > 3) {
 overlaps = findOverlaps(peak_range, cdsRange, minoverlap=3)
 varclashm = as.data.table(overlaps)
 peak_site[, queryHits := .I]
-peak_site <- peak_site[!queryHits %in% varclashm$queryHits]
+peak_site <- peak_site[queryHits %in% varclashm$queryHits]
 peak_site[,c("queryHits") := NULL]
-	
+peak_site[,type:="overlap_CDS"]
 
-if(org == "hg38") {
-	obj_chr = c("chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr1","chr20","chr21","chr22","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chrM","chrX","chrY")
-} else if(org == "mm10") {
-	obj_chr = c("chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chrM","chrX","chrY")
-} else if(org == "rn6") {
-	obj_chr = c("chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr1","chr20","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chrM","chrX","chrY")
-} else if(org == "dre_GRCz11") {
-	obj_chr = c("chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr1","chr20","chr21","chr22","chr23","chr24","chr25","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chrM")
-} else if(org == "dme_BDGP6") {
-	obj_chr = c("chr2L","chr2R","chr3L","chr3R","chr4","chrM","chrX","chrY");
-} else if(org == "cel_WBcel235") {
-	obj_chr = c("chrI","chrII","chrIII","chrIV","chrM","chrV","chrX");
-}
+peak_site <- rbind(peak_site_short, peak_site)
+fwrite(peak_site,file=paste0(org,"/all.uORF.filterd.bed"),col.names=F,sep="\t",quote=F)
 
-libfiles <- list.files("./",pattern="*.candidateORF.genepred.txt$")
-for(peakfile in libfiles) {
-	#peakfile = paste0(i,".candidateORF.genepred.txt")
-	uorf_site = fread(peakfile,head=F,sep="\t")
-	setnames(uorf_site, c("ID","chr","strand","txstart","txend","cdsStart","cdsEnd","numCDS","blockStart","blockEnd"))
-	uorf_site <- uorf_site[ID %in% peak_site$ID]
-	fwrite(uorf_site,file=paste0(peakfile,".uORF"),col.names=F,sep="\t",quote=F)
-}
+
 
