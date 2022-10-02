@@ -238,11 +238,11 @@ print RI "A <- merge(A,strength,by='orfID',all.x=T)\n";
 print RI "A[is.na(strength),strength:='']\n";
 print RI "A[, c('strength','pred.pvalue') := .(pred.pvalue,strength)]\n"; 
 print RI "setnames(A,c('strength','pred.pvalue'),c('pred.pvalue','strength'))\n";  
-#print RI "A <- A[grep(\"uORF|extension|polycistronic\",orfID)]"."\n";
+print RI "A <- A[grep(\"uORF|extension\",orfID)]"."\n";
 print RI "fwrite(A, file=\"$outputDir/pred.pvalue.parameters.$orftype.txt\", sep=\"\\t\")"."\n";
 close RI;
 
-my $com1="/public/home/liyiliang/anaconda3/envs/R4.1.3/bin/Rscript $outputDir/ribORF.learning.R";
+my $com1="Rscript $outputDir/ribORF.learning.R";
 system ($com1);
 
 
