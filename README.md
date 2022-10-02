@@ -1,4 +1,4 @@
-# Ribo-uORF: a comprehensive data resource of upstream open reading frames (uORFs) based on ribosome profiling
+# Source code for modified RibORF and related programs are available at https://github.com/rnainformatics/ribo-uORF.
 
 > The source code is provided by Liuqi (biolq668@gmail.com). For questions and comments, please contact Liuqi or submit an issue on github.
 
