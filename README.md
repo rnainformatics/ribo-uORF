@@ -19,7 +19,7 @@ Convert fastq to collapsed fasta:
 
 ### 5: `fq2collapedFa.pl`
 
-### 6：uORFtools
+### 6：`uORFtools`
 
 ```
 bamExpander.pl
@@ -36,7 +36,7 @@ ribo-meta_web_single.R
 run.pl   # main program
 ```
 
-### 7：UTR5var
+### 7：`UTR5var`
 
 ```
 checkvcf.pl
