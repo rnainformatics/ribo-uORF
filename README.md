@@ -18,3 +18,28 @@ Convert fastq to collapsed fasta:
     `<fa>` : output fasta file (.fa .fasta).
 
 ### 5: `fq2collapedFa.pl`
+
+### 6：uORFtools
+
+```
+bamExpander.pl
+fastqparse.pl
+filterLength.pl
+filterUniqueFa.pl
+filter_stat.pl
+get_plot_highcharts.R
+loadMoreMake.pl
+parseFeatures.pl
+parsePrice.pl
+ribORF.parrel.pl
+ribo-meta_web_single.R
+run.pl   # main program
+```
+
+### 7：UTR5var
+
+```
+checkvcf.pl
+run_var.pl # main program
+```
+
