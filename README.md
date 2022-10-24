@@ -32,9 +32,13 @@
   <mismatch> <maxMultiMapping> 
   <detectOffset> <deDup> <ORFpvalue> 
   <email> <jobid> <uploadfile>
+  
+  
   ```
 
-#### related program:
+
+
+#### related programs:
 
 - `bamExpander.pl`
 - `fastqparse.pl`
@@ -50,7 +54,7 @@
 
 ### 3: UTR5var
 
-####  related program:
+####  main program:
 - `run_var.pl` 
 
   Usage:
@@ -58,6 +62,6 @@
   ```perl
   perl run_var.pl <species> <jobid> <email>
   ```
-####  other program:
+####  related programs:
 - `checkvcf.pl`
 
