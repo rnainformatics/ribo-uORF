@@ -2,44 +2,59 @@
 
 > The source code is provided by Liuqi (biolq668@gmail.com). For questions and comments, please contact Liuqi or submit an issue on github.
 
-http://rnainformatics.org.cn/RiboUORF/ 
+### 1: Modified_RibORF
 
-### 1: `ORFannotate.pl`
+- `ORFannotate.pl`
 
-### 2: `ribORF.pl`
+- `ribORF.pl`
 
-### 3: `uorf_lib_filter.R`
+- `uorf_lib_filter.R`
 
-### 4: `collapse_reads_md.pl`
+- `collapse_reads_md.pl`
 
-Convert fastq to collapsed fasta:
-    Usage: `perl fq2collapedFa.pl -i <fq> -o <fa>`
-    `<fq>` : fastq file without adaptor (.fq .fastq).
-    `<fa>` : output fasta file (.fa .fasta).
+  Convert fastq to collapsed fasta:
+      Usage: `perl fq2collapedFa.pl -i <fq> -o <fa>`
+      `<fq>` : fastq file without adaptor (.fq .fastq).
+      `<fa>` : output fasta file (.fa .fasta).
 
-### 5: `fq2collapedFa.pl`
+- `fq2collapedFa.pl`
 
-### 6：`uORFtools`
+### 2：uORFscan pipline
 
-```
-bamExpander.pl
-fastqparse.pl
-filterLength.pl
-filterUniqueFa.pl
-filter_stat.pl
-get_plot_highcharts.R
-loadMoreMake.pl
-parseFeatures.pl
-parsePrice.pl
-ribORF.parrel.pl
-ribo-meta_web_single.R
-run.pl   # main program
-```
+####  main program:
 
-### 7：`UTR5var`
+- `run.pl`   
 
-```
-checkvcf.pl
-run_var.pl # main program
-```
+  Usage:
+  
+  ```
+  perl run.pl <species> <minlength> <maxlength> <mismatch> <maxMultiMapping> <detectOffset> <deDup> <ORFpvalue> <email> <jobid> <uploadfile>
+  ```
+
+#### dependent program:
+
+- `bamExpander.pl`
+- `fastqparse.pl`
+- `filterLength.pl`
+- `filterUniqueFa.pl`
+- `filter_stat.pl`
+- `get_plot_highcharts.R`
+- `loadMoreMake.pl`
+- `parseFeatures.pl`
+- `parsePrice.pl`
+- `ribORF.parrel.pl`
+- `ribo-meta_web_single.R`
+
+### 3：UTR5var pipline
+
+#####  main program:
+- `run_var.pl` 
+
+  Usage:
+
+  ```
+  perl run_var.pl <species> <jobid> <email>
+  ```
+#####  main program:
+- `checkvcf.pl`
 
