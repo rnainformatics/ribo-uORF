@@ -19,7 +19,7 @@
 
 - `fq2collapedFa.pl`
 
-### 2：uORFscan
+### 2: uORFscan
 
 ####  main program:
 
@@ -48,7 +48,7 @@
 - `ribORF.parrel.pl`
 - `ribo-meta_web_single.R`
 
-### 3：UTR5var
+### 3: UTR5var
 
 ####  main program:
 - `run_var.pl` 
