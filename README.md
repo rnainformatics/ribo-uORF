@@ -13,9 +13,12 @@
 - `collapse_reads_md.pl`
 
   Convert fastq to collapsed fasta:
-      Usage: `perl fq2collapedFa.pl -i <fq> -o <fa>`
-      `<fq>` : fastq file without adaptor (.fq .fastq).
-      `<fa>` : output fasta file (.fa .fasta).
+
+  ```perl
+  Usage: perl fq2collapedFa.pl -i <fq> -o <fa>
+  <fq> : fastq file without adaptor (.fq .fastq).
+  <fa> : output fasta file (.fa .fasta).
+  ```
 
 - `fq2collapedFa.pl`
 
@@ -25,18 +28,24 @@
 
 - `run.pl`   
 
-  Usage:
-  
-  ```perl
-  perl run.pl <species> <minlength> <maxlength>
-  <mismatch> <maxMultiMapping> 
-  <detectOffset> <deDup> <ORFpvalue> 
-  <email> <jobid> <uploadfile>
-  
-  
+  ```txt
+  Usage: perl run.pl <species> <minlength> <maxlength>
+  	<mismatch> <maxMultiMapping> 
+  	<detectOffset> <deDup> <ORFpvalue> 
+  	<email> <jobid> <uploadfile>
+  	
+  <species>: Select the reference genome 
+  <minlength>: Shortest RPF Length of interval (nt)
+  <maxlength>: Longest RPF Length of interval (nt)
+  <mismatch>: Allowed mismatch in RPF mapping
+  <maxMultiMapping>: Max. of multiple-mapping
+  <detectOffset>: Whether detect p-site offset automatically
+  <deDup>: whether remove unique molecular identifiers (UMI) for the Ribo-seq data which used UMI to differentiate biological duplicates from PCR duplicates
+  <ORFpvalue>: Score cutoff for active translated uORFs
+  <email>: Get an notification when the job is done 
+  <jobid>: random string (16 characters)
+  <uploadfile>: fasta file (.fa .fasta)
   ```
-
-
 
 #### related programs:
 
@@ -57,10 +66,8 @@
 ####  main program:
 - `run_var.pl` 
 
-  Usage:
-
-  ```perl
-  perl run_var.pl <species> <jobid> <email>
+  ```txt
+  Usage: perl run_var.pl <species> <jobid> <email>
   ```
 ####  related programs:
 - `checkvcf.pl`
