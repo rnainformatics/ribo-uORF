@@ -34,7 +34,7 @@
   			<email> <jobid> <uploadfile>
   ```
 
-#### dependent program:
+#### other program:
 
 - `bamExpander.pl`
 - `fastqparse.pl`
@@ -50,7 +50,7 @@
 
 ### 3：UTR5var
 
-#####  main program:
+####  main program:
 - `run_var.pl` 
 
   Usage:
@@ -58,6 +58,6 @@
   ```perl
   perl run_var.pl <species> <jobid> <email>
   ```
-#####  main program:
+####  other program:
 - `checkvcf.pl`
 
