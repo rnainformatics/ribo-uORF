@@ -29,12 +29,12 @@
   
   ```perl
   perl run.pl <species> <minlength> <maxlength>
-  			<mismatch> <maxMultiMapping> 
-  			<detectOffset> <deDup> <ORFpvalue> 
-  			<email> <jobid> <uploadfile>
+  <mismatch> <maxMultiMapping> 
+  <detectOffset> <deDup> <ORFpvalue> 
+  <email> <jobid> <uploadfile>
   ```
 
-#### other program:
+#### related program:
 
 - `bamExpander.pl`
 - `fastqparse.pl`
@@ -50,7 +50,7 @@
 
 ### 3: UTR5var
 
-####  main program:
+####  related program:
 - `run_var.pl` 
 
   Usage:
