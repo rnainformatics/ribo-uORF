@@ -19,7 +19,7 @@
 
 - `fq2collapedFa.pl`
 
-### 2：uORFscan pipline
+### 2：uORFscan
 
 ####  main program:
 
@@ -27,8 +27,11 @@
 
   Usage:
   
-  ```
-  perl run.pl <species> <minlength> <maxlength> <mismatch> <maxMultiMapping> <detectOffset> <deDup> <ORFpvalue> <email> <jobid> <uploadfile>
+  ```perl
+  perl run.pl <species> <minlength> <maxlength>
+  			<mismatch> <maxMultiMapping> 
+  			<detectOffset> <deDup> <ORFpvalue> 
+  			<email> <jobid> <uploadfile>
   ```
 
 #### dependent program:
@@ -45,14 +48,14 @@
 - `ribORF.parrel.pl`
 - `ribo-meta_web_single.R`
 
-### 3：UTR5var pipline
+### 3：UTR5var
 
 #####  main program:
 - `run_var.pl` 
 
   Usage:
 
-  ```
+  ```perl
   perl run_var.pl <species> <jobid> <email>
   ```
 #####  main program:
