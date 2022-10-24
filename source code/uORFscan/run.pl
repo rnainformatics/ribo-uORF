@@ -3,8 +3,8 @@
 use JSON::XS;
 use Data::Dumper;
 
-my ($species, $minlen, $maxlen, $mismatch, $maxMultiMapping, $detectOffset, $deDup, $ORFpvalue, $email, $jobid, $uploadfile, $ncpu);
-($species, $minlen, $maxlen, $mismatch, $maxMultiMapping, $detectOffset, $deDup,  $ORFpvalue, $email, $jobid, $uploadfile)=@ARGV;
+my ($species, $minlen, $maxlen, $mismatch, $maxMultiMapping, $detectOffset, $deDup, $ORFpvalue, $jobid, $uploadfile, $ncpu);
+($species, $minlen, $maxlen, $mismatch, $maxMultiMapping, $detectOffset, $deDup,  $ORFpvalue, $jobid, $uploadfile)=@ARGV;
 
 my $samplenames = "NA";
 
@@ -239,7 +239,6 @@ system("perl ./program/loadMoreMake.pl $jobid");
 #system("rm $resultTemp -fr");
 &get_log_status("Job completed. Thanks for using Ribo-uORF!","Job complete",100);
 
-system("perl ./program/sendresultmail.pl $email $jobid") if $email ne "NA";
 
 
 sub get_log_status()

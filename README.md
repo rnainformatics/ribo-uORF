@@ -32,7 +32,7 @@
   Usage: perl run.pl <species> <minlength> <maxlength>
   	<mismatch> <maxMultiMapping> 
   	<detectOffset> <deDup> <ORFpvalue> 
-  	<email> <jobid> <uploadfile>
+  	<jobid> <uploadfile>
   	
   <species>: Select the reference genome 
   <minlength>: Shortest RPF Length of interval (nt)
@@ -42,7 +42,6 @@
   <detectOffset>: Whether detect p-site offset automatically
   <deDup>: whether remove unique molecular identifiers (UMI) for the Ribo-seq data which used UMI to differentiate biological duplicates from PCR duplicates
   <ORFpvalue>: Score cutoff for active translated uORFs
-  <email>: Get an notification when the job is done 
   <jobid>: random string (16 characters)
   <uploadfile>: fasta file (.fa .fasta)
   ```
