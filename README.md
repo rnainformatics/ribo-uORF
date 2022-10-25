@@ -78,4 +78,4 @@ This source code repository can be separated into three main sections：
   <uploadfile>: vcf file (.vcf)
   ```
 ####  related programs:
-- `checkvcf.pl` :  Only files in VCF format are supported.
+- `checkvcf.pl` :  Check whether the uploaded file is a vcf file.
