@@ -5,8 +5,8 @@
 This source code repository can be separated into three main sections：
 
 > - 1: Modified_RibORF
-> - 2: uORFscan
-> - 3: UTR5var
+> - 2: uORFscan: tools for uORF identification from user-loaded Ribo-seq datasets
+> - 3: UTR5var: tools for investigating the effect of variation on 5’ UTR regions
 
 ### 1: Modified_RibORF
 
@@ -28,7 +28,7 @@ This source code repository can be separated into three main sections：
 
 - `fq2collapedFa.pl`
 
-### 2: uORFscan
+### 2: uORFscan: tools for uORF identification from user-loaded Ribo-seq datasets
 
 ####  main program:
 
@@ -48,7 +48,7 @@ This source code repository can be separated into three main sections：
   <detectOffset>: Whether detect p-site offset automatically
   <deDup>: whether remove unique molecular identifiers (UMI) for the Ribo-seq data which used UMI to differentiate biological duplicates from PCR duplicates
   <ORFpvalue>: Score cutoff for active translated uORFs
-  <jobid>: random string (16 characters)
+  <jobid>: Random string (16 characters)
   <uploadfile>: fasta file (.fa .fasta)
   ```
 
@@ -66,13 +66,17 @@ This source code repository can be separated into three main sections：
 - `ribORF.parrel.pl`
 - `ribo-meta_web_single.R`
 
-### 3: UTR5var
+### 3: UTR5var: tools for investigating the effect of variation on 5’ UTR regions
 
 ####  main program:
 - `run_var.pl` 
 
   ```txt
   Usage: perl run_var.pl <species> <jobid> <email>
+  
+  <species>: Select the reference genome
+  <jobid>: Random string (16 characters)
+  <email>: Get an notification when the job is done 
   ```
 ####  related programs:
 - `checkvcf.pl`
