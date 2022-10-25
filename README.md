@@ -72,12 +72,10 @@ This source code repository can be separated into three main sections：
 - `run_var.pl` 
 
   ```txt
-  Usage: perl run_var.pl <species> <jobid> <email>
+  Usage: perl run_var.pl <referencefile> <uploadfile>
   
-  <species>: Select the reference genome
-  <jobid>: Random string (16 characters)
-  <email>: Get an notification when the job is done 
+  <referencefile>: bed file (.bed)
+  <uploadfile>: vcf file (.vcf)
   ```
 ####  related programs:
-- `checkvcf.pl`
-
+- `checkvcf.pl` :  Only files in VCF format are supported.

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-my ($ref, $jobid, $email)=@ARGV;
+my ($ref, $jobid)=@ARGV;
 
 my $samplenames = "NA";
 
@@ -73,7 +73,6 @@ if($nrecord < 2){
 system("cat ./data/results/$jobid/vep.out_summary.html | sed 's/\\/mnt\\/data\\/software\\/ensembl-vep\\/cache\\///g' | sed 's/.\\/data\\/results\\///g' > ./data/results/$jobid/vep.out_summary_rev.html");       
 &get_log_status("Job completed. Thanks for using Ribo-uORF!","Job complete",100);
 
-system("perl ./program/sendresultmail.pl $email $jobid") if $email ne "NA";
 
 sub get_log_status()
 {
