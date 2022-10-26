@@ -19,8 +19,8 @@ my $rRNAindex = "$dbbasepath/rRNA/$species.rRNA.fa";
 my $tRNAindex = "$dbbasepath/tRNA/$species.tRNA.fa";
 my $snRNAindex = "$dbbasepath/snRNA/$species.snRNA.fa";
 
-$minlen //= 26;
-$maxlen //= 34;
+$minlen //= 27;
+$maxlen //= 32;
 $mismatch //= 2;
 $detectOffset //= 1;
 $deDup //= "N";
