@@ -1,5 +1,3 @@
-# Source code for modified RibORF and related programs are available at https://github.com/rnainformatics/ribo-uORF.
-
 > The source code is provided by Liuqi (biolq668@gmail.com). For questions and comments, please contact Liuqi or submit an issue on github.
 
 This source code repository can be separated into three main sections：
