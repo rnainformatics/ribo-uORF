@@ -1,7 +1,6 @@
 #!/usr/bin/perl -w
 
 use JSON::XS;
-use Data::Dumper;
 
 my ($species, $minlen, $maxlen, $mismatch, $maxMultiMapping, $detectOffset, $deDup, $ORFpvalue, $jobid, $uploadfile, $ncpu);
 ($species, $minlen, $maxlen, $mismatch, $maxMultiMapping, $detectOffset, $deDup,  $ORFpvalue, $jobid, $uploadfile)=@ARGV;
@@ -76,12 +75,6 @@ system("STAR --outFilterType BySJout --runThreadN $ncpu --outFilterMismatchNmax 
 system("perl  program/bamExpander.pl $resultdir $deDup|samtools view -bS -o $resultdir/genomeFqAligned.sortedByCoord.out.bam -");
 system("samtools index $resultdir/genomeFqAligned.sortedByCoord.out.bam");
 
-#system("ribotish quality -b $resultdir/genomeFqAligned.sortedByCoord.out.bam -g $gtfindex -o $resultdir/ribotish_qual -f $resultdir/ribotish_qual.pdf -p $ncpu -l 26,34");
-
-#count expression RPF count
-#&get_log_status("RPF counting and expression profiling using featureCounts in Subread package v1.6.3 ","Ribosome profiling",25);
-#system("featureCounts -T $ncpu -t exon -g gene_id -a $gtfindex -R CORE --Rpath $resultdir -o $resultdir/featurecount.unique.txt $resultdir/genomeAligned.sortedByCoord.out.bam");
-
 system("samtools view -F4 $resultdir/genomeAligned.sortedByCoord.out.bam|awk '{print \$1}'|uniq > $resultTemp/uniqueMap.read.txt");
 
 system("perl ./program/parseFeatures.pl $resultdir $resultTemp/clean.fa $deDup");
@@ -119,10 +112,9 @@ if($mappingRate < 5) {
 	&get_log_status("The genome mapping rate is only <font color='red'>$mappingRate%</font>! Please check! Maybe you selected the wrong species.","Error",25);
 	exit;
 }
-#system("perl ./program/filterUniqueFa.pl $resultdir/genomeAligned.sortedByCoord.out.bam $resultTemp/clean.fa $resultdir");
 
 
-&get_log_status("RPF mapping to transcriptome using using Bowtie v1.2.2","RPF profiling",30);
+&get_log_status("RPF mapping to transcriptome using using Bowtie","RPF profiling",30);
 system("bowtie2 -f -p $ncpu -a -x $mRNAindex -U $resultTemp/clean.uniqueMapping.fa | samtools view -bS > $resultTemp/mRNA.bam"); 
 system("samtools sort -o $resultdir/mRNA.sort.bam $resultTemp/mRNA.bam");
 #system("samtools view -F4 $resultTemp/mRNA.bam|awk '{print \$1}'|uniq > $resultTemp/mRNA.read.txt");
@@ -196,19 +188,7 @@ if($detectOffset == 1) {
 
 print STDERR "ORF finding ...\n";
 &get_log_status("Active translated ORF calling","Annotating",30);
-
-my $orftool = "ribORF";
-if($orftool eq "Price") {
-	system("/share/software/Price_1.0.3/gedi -e Price -reads $resultdir/genomeFqAligned.sortedByCoord.out.bam -genomic ./db/price/$species.oml -prefix $resultdir/hsv -progress -plot");
-	system("perl ./program/parsePrice.pl $resultdir $species");
-} elsif($orftool eq "ribotish") {
-	system("ribotish predict -b $resultdir/genomeFqAligned.sortedByCoord.out.bam -g $gtfindex -f $genomefa -o $resultdir/orflist.txt -p $ncpu");
-} elsif($orftool eq "ribORF") {
-	#print("perl ./program/ribORF.parrel.pl -f $resultdir/genomeAligned.sortedByCoord.out.bam -s $resultdir/offsets.conf.txt -d $genepredindex -o $resultdir\n");
-	system("perl ./program/ribORF.parrel.pl -f $resultdir/genomeAligned.sortedByCoord.out.bam -s $resultdir/offsets.conf.txt -d $genepredindex -o $resultdir");
-}
-#./data/results/Je3Re096PwUXpzY1
-#system("Rscript ./program/parseORF.R $species $jobid $orftool");
+system("perl ./program/ribORF.parrel.pl -f $resultdir/genomeAligned.sortedByCoord.out.bam -s $resultdir/offsets.conf.txt -d $genepredindex -o $resultdir");
 
 
 my $nrecord = 0;
@@ -224,19 +204,7 @@ if($nrecord < 2){
    exit;
 }
 
-print STDERR "Ribo metagene analysis ...\n";
-&get_log_status("Ribo metagene analysis","Annotating", 70);
-system("Rscript ./program/ribo-meta_web_single.R $species $jobid $samplenames");
-
-system("Rscript ./program/get_plot_highcharts.R $jobid");
-system("perl ./program/loadMoreMake.pl $jobid");
-#system("chown -R www-data:www-data $resultdir");
-
-#system("rm $resultTemp -fr");
-#if(-e $jobid."_psites.hd5") {
-#	system("rm $jobid"."_psites.hd5");
-#}
-#system("rm $resultTemp -fr");
+system("rm $resultTemp -fr");
 &get_log_status("Job completed. Thanks for using Ribo-uORF!","Job complete",100);
 
 
