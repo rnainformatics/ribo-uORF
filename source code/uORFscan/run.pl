@@ -11,7 +11,6 @@ my $dbbasepath =   "./db/";
 my $genomeindex = "$dbbasepath/STAR_index/$species";
 my $genomefa = "$dbbasepath/genome/$species.fa";
 my $gtfindex = "$dbbasepath/annotation/$species.annotation.gtf";
-my $ribocodeLib = "$dbbasepath/ribocode/$species";
 my $genepredindex = "$dbbasepath/ribORF_uORF/$species";
 my $mRNAindex = "$dbbasepath/mRNA/$species.txdb.fa";
 my $rRNAindex = "$dbbasepath/rRNA/$species.rRNA.fa";
@@ -68,7 +67,7 @@ if($nseq < 10000){
    exit;
 }
 
-&get_log_status("RPF mapping to genome using STAR v2.7.3a","RPF mapping",10);
+&get_log_status("RPF mapping to genome using STAR","RPF mapping",10);
 system("STAR --outFilterType BySJout --runThreadN $ncpu --outFilterMismatchNmax $mismatch --genomeDir $genomeindex --readFilesIn $resultTemp/clean.fa  --quantMode TranscriptomeSAM GeneCounts --outSAMattributes MD NH --alignEndsType EndToEnd --outFilterMultimapNmax $maxMultiMapping --outFileNamePrefix $resultdir/genome --outSAMtype BAM SortedByCoordinate");
 
 &get_log_status("Extract end to end mapped reads","RPF mapping",20);
@@ -113,12 +112,6 @@ if($mappingRate < 5) {
 	exit;
 }
 
-
-&get_log_status("RPF mapping to transcriptome using using Bowtie","RPF profiling",30);
-system("bowtie2 -f -p $ncpu -a -x $mRNAindex -U $resultTemp/clean.uniqueMapping.fa | samtools view -bS > $resultTemp/mRNA.bam"); 
-system("samtools sort -o $resultdir/mRNA.sort.bam $resultTemp/mRNA.bam");
-#system("samtools view -F4 $resultTemp/mRNA.bam|awk '{print \$1}'|uniq > $resultTemp/mRNA.read.txt");
-system("samtools index $resultdir/mRNA.sort.bam");
 
 ##p-site infer
 my $offsetString = "26,27,28,29,30,31 12,12,12,12,12,12";
