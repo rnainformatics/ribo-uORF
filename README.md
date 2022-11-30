@@ -58,11 +58,8 @@ This source code repository can be separated into three main sections：
 - `filterUniqueFa.pl`
 - `filter_stat.pl`
 - `get_plot_highcharts.R`
-- `loadMoreMake.pl`
 - `parseFeatures.pl`
-- `parsePrice.pl`
 - `ribORF.parrel.pl`
-- `ribo-meta_web_single.R`
 
 ### 3: UTR5var: tools for investigating the effect of variation on 5’ UTR regions
 
