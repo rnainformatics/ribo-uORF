@@ -50,13 +50,12 @@ system("vcftools --vcf ./data/results/$jobid/$jobid.nochr.vcf --bed $utr5bed --o
 
 ##filter the rRNA defived reads
 &get_log_status("Annotate the variations using VEP","Annotating",50);
-print("/share/software/miniconda/envs/vep/bin/perl /share/software/miniconda/envs/vep/bin/vep  --cache --dir_cache /public/liuqi/ensembl-vep/vep_cache --format vcf --fork 6 -i ./data/results/$jobid/utr5.recode.vcf --species $species --assembly $assembly --plugin UTRannotator,/public/liuqi/ensembl-vep/plugins/UTRannotator/uORF_5UTR_GRCh38_PUBLIC.txt --dir_plugins /public/liuqi/ensembl-vep/plugins/UTRannotator --tab --host ensembldb.ensembl.org --port 5306 --force_overwrite -o ./data/results/$jobid/vep.out\n");
-system("/share/software/miniconda/envs/vep/bin/perl /share/software/miniconda/envs/vep/bin/vep  --cache --dir_cache /public/liuqi/ensembl-vep/vep_cache --format vcf --fork 6 -i ./data/results/$jobid/utr5.recode.vcf --species $species --assembly $assembly --plugin UTRannotator,/public/liuqi/ensembl-vep/plugins/UTRannotator/uORF_5UTR_GRCh38_PUBLIC.txt --dir_plugins /public/liuqi/ensembl-vep/plugins/UTRannotator --tab --host ensembldb.ensembl.org --port 5306 --force_overwrite -o ./data/results/$jobid/vep.out");
+system("vep  --cache --dir_cache /public/liuqi/ensembl-vep/vep_cache --format vcf --fork 6 -i ./data/results/$jobid/utr5.recode.vcf --species $species --assembly $assembly --plugin UTRannotator,/public/liuqi/ensembl-vep/plugins/UTRannotator/uORF_5UTR_GRCh38_PUBLIC.txt --dir_plugins /public/liuqi/ensembl-vep/plugins/UTRannotator --tab --host ensembldb.ensembl.org --port 5306 --force_overwrite -o ./data/results/$jobid/vep.out");
 
 #if($ref eq "hg38" || $ref eq "mm10"){
-#	system("/share/software/miniconda/envs/R4.1.2/bin/Rscript ./program/utr.annotation.R $species $jobid");
+#	system("Rscript ./program/utr.annotation.R $species $jobid");
 #}
-system("/share/software/miniconda/envs/R4.1.2/bin/Rscript ./program/parseVep.R $jobid $ref");
+system("Rscript ./program/parseVep.R $jobid $ref");
 my $nrecord = 0;
 open SEQ, "$resultdir/vep.effected.txt" || die "$!";
 <SEQ>;
