@@ -53,7 +53,6 @@ This source code repository can be separated into three main sections：
 #### related programs:
 
 - `bamExpander.pl`
-- `fastqparse.pl`
 - `filterLength.pl`
 - `filterUniqueFa.pl`
 - `filter_stat.pl`
